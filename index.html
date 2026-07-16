@@ -288,7 +288,7 @@
   .projects{ background:var(--navy-deep); color:var(--white); }
   .project-grid{
     display:grid;
-    grid-template-columns:repeat(2,1fr);
+    grid-template-columns:repeat(3,1fr);
     gap:1px;
     background:var(--navy-line);
     border:1px solid var(--navy-line);
@@ -306,16 +306,22 @@
   }
   .project-card h3{
     font-family:var(--display);
-    font-size:28px;
+    font-size:26px;
     font-weight:700;
     margin:10px 0 14px;
     letter-spacing:0.01em;
   }
   .project-card p{
     color:var(--paper-dim);
-    font-size:15px;
-    max-width:48ch;
-    margin-bottom:20px;
+    font-size:14.5px;
+    margin-bottom:16px;
+  }
+  .project-card p.status-line{
+    font-family:var(--mono);
+    font-size:11.5px;
+    letter-spacing:0.02em;
+    color:var(--cyan-dim);
+    line-height:1.5;
   }
   .tag-row{ display:flex; gap:10px; flex-wrap:wrap; }
   .tag{
@@ -331,34 +337,87 @@
 
   /* ---------- Team ---------- */
   .team{ background:var(--paper); }
-  .team-grid{
+
+  .leader-grid{
     display:grid;
-    grid-template-columns:repeat(4,1fr);
+    grid-template-columns:repeat(3,1fr);
     gap:1px;
     background:rgba(10,25,41,0.14);
     border:1px solid rgba(10,25,41,0.14);
+    margin-top:10px;
   }
-  .team-card{
+  .leader-card{
     background:var(--paper);
-    padding:30px 22px;
+    padding:30px 26px;
     text-align:left;
   }
-  .team-card .role-code{
+  .leader-card .role-code{
     font-family:var(--mono);
-    font-size:11px;
+    font-size:10.5px;
     color:#0a7a91;
-    letter-spacing:0.08em;
+    letter-spacing:0.09em;
   }
-  .team-card h4{
+  .leader-card h4{
     font-family:var(--display);
-    font-size:22px;
+    font-size:23px;
     font-weight:700;
     margin:8px 0 6px;
   }
-  .team-card p{
+  .leader-card p{
     font-size:13.5px;
     color:var(--navy-mid);
-    opacity:0.75;
+    opacity:0.8;
+  }
+  .leader-links{
+    display:flex;
+    gap:16px;
+    margin-top:12px;
+  }
+  .leader-links a{
+    font-family:var(--mono);
+    font-size:12px;
+    color:var(--red);
+  }
+  .leader-links a:hover{ text-decoration:underline; }
+
+  .roster-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:36px;
+    margin-top:64px;
+  }
+  .roster-head{
+    display:flex;
+    align-items:baseline;
+    gap:12px;
+    margin-bottom:14px;
+    padding-bottom:12px;
+    border-bottom:1px solid rgba(10,25,41,0.2);
+  }
+  .roster-head .project-code{
+    font-family:var(--mono);
+    font-size:12px;
+    color:#0a7a91;
+    letter-spacing:0.08em;
+  }
+  .roster-head h4{
+    font-family:var(--display);
+    font-size:19px;
+    font-weight:700;
+  }
+  .roster-list li{
+    display:flex;
+    flex-direction:column;
+    padding:9px 0;
+    font-size:14px;
+  }
+  .roster-list li span:first-child{ font-weight:600; }
+  .roster-list li span:last-child{
+    font-family:var(--mono);
+    font-size:11px;
+    color:var(--steel);
+    letter-spacing:0.02em;
+    margin-top:2px;
   }
 
   /* ---------- Contact ---------- */
@@ -369,15 +428,77 @@
     gap:60px;
   }
   .contact p{ color:var(--paper-dim); max-width:44ch; margin-bottom:26px; }
-  .contact-list{ font-family:var(--mono); font-size:15px; }
-  .contact-list li{
-    padding:14px 0;
-    border-bottom:1px solid var(--navy-line);
+  .contact-buttons{
+    display:flex;
+    flex-direction:column;
+    gap:1px;
+    background:var(--navy-line);
+    border:1px solid var(--navy-line);
+    margin-top:34px;
+  }
+  .contact-btn{
     display:flex;
     justify-content:space-between;
+    align-items:center;
+    background:var(--navy-deep);
+    padding:16px 20px;
+    font-family:var(--mono);
+    transition:background .2s ease, padding-left .2s ease;
   }
-  .contact-list li span:first-child{ color:var(--steel); text-transform:uppercase; font-size:11px; letter-spacing:0.08em; align-self:center;}
-  .contact-list a:hover{ color:var(--cyan); }
+  a.contact-btn:hover, a.contact-btn:focus-visible{
+    background:var(--navy-mid);
+    padding-left:28px;
+  }
+  .contact-btn .cb-label{
+    font-size:11px;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    color:var(--steel);
+  }
+  .contact-btn .cb-value{
+    font-size:14px;
+    color:var(--white);
+  }
+  a.contact-btn:hover .cb-value, a.contact-btn:focus-visible .cb-value{ color:var(--cyan); }
+
+  .msg-form{
+    display:flex;
+    flex-direction:column;
+    gap:6px;
+    background:var(--navy-mid);
+    border:1px solid var(--navy-line);
+    padding:32px;
+  }
+  .msg-form label{
+    font-family:var(--mono);
+    font-size:11px;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    color:var(--steel);
+    margin-top:14px;
+  }
+  .msg-form input[type="text"],
+  .msg-form input[type="email"],
+  .msg-form textarea{
+    background:var(--navy-deep);
+    border:1px solid var(--navy-line);
+    color:var(--white);
+    font-family:var(--body);
+    font-size:15px;
+    padding:11px 13px;
+    resize:vertical;
+  }
+  .msg-form input:focus,
+  .msg-form textarea:focus{
+    border-color:var(--cyan);
+  }
+  .form-note{
+    font-family:var(--mono);
+    font-size:12.5px;
+    color:var(--cyan);
+    margin-top:12px;
+    min-height:1em;
+  }
 
   footer{
     background:var(--navy-deep);
@@ -395,7 +516,8 @@
     .hero-figure{ order:-1; max-width:340px; margin:0 auto 20px; }
     .about-grid{ grid-template-columns:1fr; }
     .project-grid{ grid-template-columns:1fr; }
-    .team-grid{ grid-template-columns:repeat(2,1fr); }
+    .leader-grid{ grid-template-columns:1fr; }
+    .roster-grid{ grid-template-columns:1fr; gap:44px; }
     .contact-grid{ grid-template-columns:1fr; }
     nav ul{
       position:fixed;
@@ -420,7 +542,6 @@
     }
   }
   @media (max-width:560px){
-    .team-grid{ grid-template-columns:1fr; }
     .section-pad{ padding:80px 0; }
   }
 
@@ -520,38 +641,32 @@
     <div class="project-grid reveal">
       <div class="project-card">
         <div class="project-code">HZF-01</div>
-        <h3>[Proje Adını Girin]</h3>
-        <p>Bu alana projenizin kısa açıklamasını ekleyin: hangi problemi çözüyor, hangi teknolojileri kullanıyor.</p>
+        <h3>ŞAHİ Hava Savunma Sistemi</h3>
+        <p>Manuel ve otonom modlara sahip, yapay zekâ destekli görüntü işleme özelliği barındıran yakın menzil hava savunma sistemi projesi.</p>
+        <p class="status-line">DURUM: Ön Tasarım Raporu ve Kritik Tasarım Raporu aşamaları geçildi, Video Yükleme Aşamasında. Geliştirme sürüyor.</p>
         <div class="tag-row">
           <span class="tag status">Geliştirme Aşamasında</span>
-          <span class="tag">İHA</span>
+          <span class="tag">Çelikkubbe Hava Savunma Sistemleri Yarışması</span>
         </div>
       </div>
       <div class="project-card">
         <div class="project-code">HZF-02</div>
-        <h3>[Proje Adını Girin]</h3>
-        <p>Bu alana projenizin kısa açıklamasını ekleyin: hangi problemi çözüyor, hangi teknolojileri kullanıyor.</p>
+        <h3>Ilgar-İz</h3>
+        <p>Uzaktan kontrol edilebilen, 8x8 hareket sistemine sahip, RFID çip okuyabilen ve koli teslimatı yapabilen otonom kara aracı.</p>
+        <p class="status-line">DURUM: Ön Değerlendirme Raporu ve Proje Detay Raporu aşamaları geçildi, Video Yükleme Aşamasında. Geliştirme sürüyor.</p>
         <div class="tag-row">
-          <span class="tag status">Tasarım Aşamasında</span>
-          <span class="tag">Roket</span>
+          <span class="tag status">Geliştirme Aşamasında</span>
+          <span class="tag">Robolig Yarışması — Üniversite Seviyesi</span>
         </div>
       </div>
       <div class="project-card">
         <div class="project-code">HZF-03</div>
-        <h3>[Proje Adını Girin]</h3>
-        <p>Bu alana projenizin kısa açıklamasını ekleyin: hangi problemi çözüyor, hangi teknolojileri kullanıyor.</p>
+        <h3>Gözcü-M</h3>
+        <p>Maden işçilerinin yer altı galerilerinde güvenliğini sağlayan giyilebilir bir ekosistem; sensörler aracılığıyla her işçinin anlık güvenlik takibini yapar.</p>
+        <p class="status-line">DURUM: Ön Tasarım Raporu geçildi, Sunum Aşamasında. Geliştirme sürüyor.</p>
         <div class="tag-row">
-          <span class="tag status">Test Aşamasında</span>
-          <span class="tag">Yazılım</span>
-        </div>
-      </div>
-      <div class="project-card">
-        <div class="project-code">HZF-04</div>
-        <h3>[Proje Adını Girin]</h3>
-        <p>Bu alana projenizin kısa açıklamasını ekleyin: hangi problemi çözüyor, hangi teknolojileri kullanıyor.</p>
-        <div class="tag-row">
-          <span class="tag status">Planlama Aşamasında</span>
-          <span class="tag">Sensör Sistemleri</span>
+          <span class="tag status">Geliştirme Aşamasında</span>
+          <span class="tag">Maden Teknolojileri Yarışması — Akıllı İSG</span>
         </div>
       </div>
     </div>
@@ -562,30 +677,76 @@
 <section class="team section-pad" id="ekip">
   <div class="wrap">
     <div class="eyebrow">03 — EKİP</div>
-    <h2 class="section-title reveal">Takımı oluşturan disiplinler</h2>
+    <h2 class="section-title reveal">Bu ekibi oluşturanlar</h2>
     <div class="rule"></div>
-  </div>
-  <div class="wrap">
-    <div class="team-grid reveal">
-      <div class="team-card">
-        <div class="role-code">ROL / 01</div>
-        <h4>Takım Kaptanı</h4>
-        <p>Proje yönetimi ve TEKNOFEST süreç koordinasyonu.</p>
+
+    <div class="leader-grid reveal">
+      <div class="leader-card">
+        <div class="role-code">TAKIM DANIŞMANI</div>
+        <h4>Dr. Öğr. Üyesi Sinan Keyinci</h4>
+        <p>Çukurova Üniversitesi, Otomotiv Mühendisliği</p>
       </div>
-      <div class="team-card">
-        <div class="role-code">ROL / 02</div>
-        <h4>Yazılım</h4>
-        <p>Kontrol algoritmaları, otonom sistemler ve gömülü yazılım.</p>
+      <div class="leader-card">
+        <div class="role-code">TAKIM KURUCU KAPTANI</div>
+        <h4>Emre Karakaya</h4>
+        <p>Çukurova Üniversitesi, Otomotiv Mühendisliği ve Endüstri Mühendisliği Lisans Öğrencisi</p>
+        <div class="leader-links">
+          <a href="https://tr.linkedin.com/in/emrekarakaya751" target="_blank" rel="noopener">LinkedIn →</a>
+          <a href="mailto:emrekarakaya751@gmail.com">E-posta →</a>
+        </div>
       </div>
-      <div class="team-card">
-        <div class="role-code">ROL / 03</div>
-        <h4>Elektronik-Donanım</h4>
-        <p>Devre tasarımı, sensör entegrasyonu ve haberleşme sistemleri.</p>
+      <div class="leader-card">
+        <div class="role-code">ILGAR-İZ PROJE KAPTANI</div>
+        <h4>Ayşe Nur Boran</h4>
+        <p>Adana Alparslan Türkeş Bilim ve Teknoloji Üniversitesi, Endüstri Mühendisliği Lisans Öğrencisi</p>
       </div>
-      <div class="team-card">
-        <div class="role-code">ROL / 04</div>
-        <h4>Mekanik Tasarım</h4>
-        <p>Gövde, aerodinamik yapı ve üretim süreçleri.</p>
+    </div>
+
+    <div class="roster-grid reveal">
+      <div class="roster-block">
+        <div class="roster-head">
+          <span class="project-code">HZF-01</span>
+          <h4>ŞAHİ Hava Savunma Sistemi</h4>
+        </div>
+        <ul class="roster-list">
+          <li><span>Emre Karakaya</span><span>Takım Kaptanı · Mekanik · Elektronik</span></li>
+          <li><span>Bilal Durmuş</span><span>Mekanik</span></li>
+          <li><span>Mert Şimşek</span><span>Mekanik</span></li>
+          <li><span>Duygu Yalçın</span><span>Mekanik</span></li>
+          <li><span>Sümeyra Koyuncu</span><span>Yazılım</span></li>
+          <li><span>Rana Akdemir</span><span>Yazılım</span></li>
+          <li><span>Berfin Kişmir</span><span>Yazılım</span></li>
+          <li><span>Ayşe Nur Boran</span><span>Sponsorluk</span></li>
+        </ul>
+      </div>
+
+      <div class="roster-block">
+        <div class="roster-head">
+          <span class="project-code">HZF-02</span>
+          <h4>Ilgar-İz</h4>
+        </div>
+        <ul class="roster-list">
+          <li><span>Ayşe Nur Boran</span><span>Takım Kaptanı · Yazılım</span></li>
+          <li><span>Emre Karakaya</span><span>Mekanik · Elektronik</span></li>
+          <li><span>Çağatay Demirel</span><span>Mekanik</span></li>
+          <li><span>Elif Kütükoğlu</span><span>Elektronik</span></li>
+          <li><span>Fatma Kınalı</span><span>Elektronik</span></li>
+        </ul>
+      </div>
+
+      <div class="roster-block">
+        <div class="roster-head">
+          <span class="project-code">HZF-03</span>
+          <h4>Gözcü-M</h4>
+        </div>
+        <ul class="roster-list">
+          <li><span>Emre Karakaya</span><span>Takım Kaptanı · Elektronik</span></li>
+          <li><span>Leyla Şule Karınsız</span><span>Yazılım</span></li>
+          <li><span>Sena Yıldırım</span><span>Yazılım</span></li>
+          <li><span>Esra Hedef</span><span>Yazılım</span></li>
+          <li><span>Erkan Öksüz</span><span>Elektronik</span></li>
+          <li><span>İlke Akgün</span><span>Elektronik</span></li>
+        </ul>
       </div>
     </div>
   </div>
@@ -597,14 +758,45 @@
     <div>
       <div class="eyebrow">04 — İLETİŞİM</div>
       <h2 class="section-title reveal" style="margin-top:16px;">Bizimle iletişime geçin</h2>
-      <p style="margin-top:22px;">Sponsorluk, iş birliği veya takıma katılım hakkında konuşmak için bize ulaşabilirsiniz.</p>
+      <p style="margin-top:22px;">Sponsorluk, iş birliği veya takıma katılım hakkında konuşmak için bize ulaşabilir ya da yandaki formu doldurabilirsiniz.</p>
+
+      <div class="contact-buttons reveal">
+        <a class="contact-btn" href="mailto:hezarfenteknoiletisim@gmail.com">
+          <span class="cb-label">E-posta</span>
+          <span class="cb-value">hezarfenteknoiletisim@gmail.com</span>
+        </a>
+        <a class="contact-btn" href="https://www.instagram.com/hezarfentekno/" target="_blank" rel="noopener">
+          <span class="cb-label">Instagram</span>
+          <span class="cb-value">@hezarfentekno →</span>
+        </a>
+        <a class="contact-btn" href="https://tr.linkedin.com/company/hezarfentekno" target="_blank" rel="noopener">
+          <span class="cb-label">LinkedIn</span>
+          <span class="cb-value">Hezarfen Tekno Team →</span>
+        </a>
+        <div class="contact-btn static">
+          <span class="cb-label">Konum</span>
+          <span class="cb-value">Adana / Türkiye</span>
+        </div>
+      </div>
     </div>
-    <ul class="contact-list reveal">
-      <li><span>E-posta</span><a href="mailto:iletisim@hezarfenteknoteam.com">iletisim@hezarfenteknoteam.com</a></li>
-      <li><span>Instagram</span><a href="#">@hezarfenteknoteam</a></li>
-      <li><span>LinkedIn</span><a href="#">Hezarfen Tekno Team</a></li>
-      <li><span>Konum</span><span>Türkiye</span></li>
-    </ul>
+
+    <form class="msg-form reveal" id="msgForm" action="https://api.web3forms.com/submit" method="POST">
+      <input type="hidden" name="access_key" value="d9408ba2-f142-4fa1-9472-c87191c49a96">
+      <input type="hidden" name="subject" value="Hezarfen Tekno Team — Yeni Mesaj">
+      <input type="checkbox" name="botcheck" style="display:none" tabindex="-1" autocomplete="off">
+
+      <label for="f-name">Ad Soyad</label>
+      <input type="text" id="f-name" name="name" required>
+
+      <label for="f-email">E-posta</label>
+      <input type="email" id="f-email" name="email" required>
+
+      <label for="f-message">Mesajınız</label>
+      <textarea id="f-message" name="message" rows="5" required></textarea>
+
+      <button type="submit" class="btn solid" style="width:100%; margin-top:8px;">Gönder</button>
+      <p class="form-note" id="formNote"></p>
+    </form>
   </div>
 </section>
 
@@ -634,6 +826,40 @@
     entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
   }, { threshold: 0.15 });
   revealEls.forEach(el => io.observe(el));
+
+  // Contact form submission (Web3Forms)
+  const msgForm = document.getElementById('msgForm');
+  const formNote = document.getElementById('formNote');
+  if (msgForm) {
+    msgForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const submitBtn = msgForm.querySelector('button[type="submit"]');
+      const key = msgForm.querySelector('input[name="access_key"]').value;
+      if (!key || key === 'YOUR_ACCESS_KEY_HERE') {
+        formNote.textContent = 'Form henüz aktif değil: access_key alanı doldurulmalı.';
+        return;
+      }
+      submitBtn.disabled = true;
+      formNote.textContent = 'Gönderiliyor...';
+      try {
+        const res = await fetch(msgForm.action, {
+          method: 'POST',
+          headers: { 'Accept': 'application/json' },
+          body: new FormData(msgForm)
+        });
+        const result = await res.json();
+        if (result.success) {
+          formNote.textContent = 'Mesajınız gönderildi, teşekkürler!';
+          msgForm.reset();
+        } else {
+          formNote.textContent = 'Bir sorun oluştu, lütfen tekrar deneyin.';
+        }
+      } catch (err) {
+        formNote.textContent = 'Bağlantı hatası, lütfen tekrar deneyin.';
+      }
+      submitBtn.disabled = false;
+    });
+  }
 </script>
 
 </body>
