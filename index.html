@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hezarfen Tekno Team — TEKNOFEST Savunma Sanayii Takımı</title>
+<meta name="description" content="Hezarfen Tekno Team, TEKNOFEST kapsamında Türk savunma sanayiine yönelik projeler geliştiren mühendislik takımıdır.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@500;700;800;900&family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600;8..60,700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy-deep:#0a1929;
+    --navy-mid:#122c46;
+    --navy-line: rgba(90,200,224,0.16);
+    --cyan:#5ac8e0;
+    --cyan-dim: rgba(90,200,224,0.55);
+    --paper:#ede7d9;
+    --paper-dim:#d9d2c0;
+    --steel:#8d99a6;
+    --red:#c81e2c;
+    --white:#f7f5ef;
+    --display: 'Big Shoulders Display', sans-serif;
+    --body: 'Source Serif 4', Georgia, serif;
+    --mono: 'JetBrains Mono', monospace;
+  }
+
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--paper);
+    color:var(--navy-deep);
+    font-family:var(--body);
+    line-height:1.6;
+    overflow-x:hidden;
+  }
+
+  a{color:inherit; text-decoration:none;}
+  ul{list-style:none;}
+  img,svg{display:block; max-width:100%;}
+
+  :focus-visible{
+    outline:2px solid var(--red);
+    outline-offset:3px;
+  }
+
+  .wrap{
+    max-width:1180px;
+    margin:0 auto;
+    padding:0 32px;
+  }
+
+  .eyebrow{
+    font-family:var(--mono);
+    font-size:12px;
+    letter-spacing:0.18em;
+    text-transform:uppercase;
+    color:var(--cyan);
+  }
+  body:not(.on-dark) .eyebrow{ color:#0a7a91; }
+
+  /* ---------- Blueprint grid backgrounds ---------- */
+  .grid-dark{
+    background-color:var(--navy-deep);
+    background-image:
+      linear-gradient(var(--navy-line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--navy-line) 1px, transparent 1px);
+    background-size:42px 42px;
+  }
+
+  /* ---------- Corner crosshair signature motif ---------- */
+  .crosshair{
+    position:absolute;
+    width:26px; height:26px;
+    pointer-events:none;
+  }
+  .crosshair::before,.crosshair::after{
+    content:"";
+    position:absolute;
+    background:currentColor;
+  }
+  .crosshair::before{ width:100%; height:1px; top:50%; left:0; }
+  .crosshair::after{ width:1px; height:100%; left:50%; top:0; }
+  .crosshair.tl{ top:20px; left:20px; color:var(--cyan-dim);}
+  .crosshair.tr{ top:20px; right:20px; color:var(--cyan-dim);}
+  .crosshair.bl{ bottom:20px; left:20px; color:var(--cyan-dim);}
+  .crosshair.br{ bottom:20px; right:20px; color:var(--cyan-dim);}
+  .coord-tag{
+    position:absolute;
+    font-family:var(--mono);
+    font-size:10px;
+    letter-spacing:0.05em;
+    color:var(--cyan-dim);
+  }
+
+  /* ---------- Header / nav ---------- */
+  header{
+    position:fixed;
+    top:0; left:0; right:0;
+    z-index:100;
+    background:rgba(10,25,41,0.92);
+    backdrop-filter:blur(6px);
+    border-bottom:1px solid var(--navy-line);
+  }
+  .nav-inner{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    height:76px;
+  }
+  .logo{
+    font-family:var(--mono);
+    color:var(--white);
+    font-size:14px;
+    letter-spacing:0.04em;
+    line-height:1.3;
+  }
+  .logo b{
+    display:block;
+    font-family:var(--display);
+    font-size:22px;
+    font-weight:800;
+    letter-spacing:0.02em;
+    color:var(--white);
+  }
+  .logo .bracket{ color:var(--cyan); }
+
+  nav ul{
+    display:flex;
+    gap:36px;
+  }
+  nav a{
+    font-family:var(--mono);
+    font-size:12px;
+    letter-spacing:0.14em;
+    text-transform:uppercase;
+    color:var(--steel);
+    position:relative;
+    padding-bottom:4px;
+    transition:color .2s ease;
+  }
+  nav a::after{
+    content:"";
+    position:absolute; left:0; bottom:0;
+    width:0; height:1px;
+    background:var(--cyan);
+    transition:width .25s ease;
+  }
+  nav a:hover, nav a:focus-visible{ color:var(--white); }
+  nav a:hover::after, nav a:focus-visible::after{ width:100%; }
+
+  .nav-toggle{ display:none; }
+
+  /* ---------- Hero ---------- */
+  .hero{
+    position:relative;
+    padding:190px 0 120px;
+    color:var(--white);
+    overflow:hidden;
+  }
+  .hero .wrap{
+    position:relative;
+    display:grid;
+    grid-template-columns:1.1fr 0.9fr;
+    gap:40px;
+    align-items:center;
+  }
+  .hero-eyebrow{ margin-bottom:22px; }
+  .hero h1{
+    font-family:var(--display);
+    font-weight:900;
+    font-size:clamp(44px, 6.4vw, 88px);
+    line-height:0.98;
+    letter-spacing:0.005em;
+    color:var(--white);
+  }
+  .hero h1 span{ color:var(--cyan); }
+  .hero p.lede{
+    font-family:var(--body);
+    font-size:18px;
+    color:var(--paper-dim);
+    max-width:46ch;
+    margin-top:24px;
+  }
+  .hero-ctas{
+    display:flex;
+    gap:16px;
+    margin-top:38px;
+    flex-wrap:wrap;
+  }
+  .btn{
+    font-family:var(--mono);
+    font-size:13px;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    padding:14px 26px;
+    border:1px solid var(--cyan);
+    color:var(--white);
+    transition:background .2s ease, color .2s ease;
+    display:inline-block;
+  }
+  .btn:hover, .btn:focus-visible{ background:var(--cyan); color:var(--navy-deep); }
+  .btn.solid{
+    background:var(--red);
+    border-color:var(--red);
+  }
+  .btn.solid:hover, .btn.solid:focus-visible{ background:#e13343; color:var(--white); border-color:#e13343; }
+
+  .hero-figure{
+    position:relative;
+  }
+  .wing-svg path.draw{
+    stroke-dasharray:1400;
+    stroke-dashoffset:1400;
+    animation:draw 2.6s ease forwards .3s;
+  }
+  .wing-svg .dim-line{
+    stroke-dasharray:1000;
+    stroke-dashoffset:1000;
+    animation:draw 1.8s ease forwards 1.6s;
+  }
+  @keyframes draw{ to{ stroke-dashoffset:0; } }
+  .callout{
+    position:absolute;
+    font-family:var(--mono);
+    font-size:11px;
+    color:var(--cyan);
+    letter-spacing:0.05em;
+    opacity:0;
+    animation:fadein .6s ease forwards 2.1s;
+  }
+  @keyframes fadein{ to{opacity:1;} }
+  .callout-1{ top:6%; right:2%; text-align:right;}
+  .callout-2{ bottom:10%; left:0%; }
+
+  /* ---------- Section shared ---------- */
+  section{ position:relative; }
+  .section-pad{ padding:110px 0; }
+  h2.section-title{
+    font-family:var(--display);
+    font-weight:800;
+    font-size:clamp(32px,4vw,52px);
+    letter-spacing:0.01em;
+    line-height:1;
+  }
+  .rule{
+    height:1px;
+    background:linear-gradient(90deg, var(--cyan-dim), transparent);
+    margin:20px 0 46px;
+  }
+  body:not(.on-dark) .rule{ background:linear-gradient(90deg, rgba(10,25,41,0.35), transparent); }
+
+  .reveal{
+    opacity:0;
+    transform:translateY(24px);
+    transition:opacity .7s ease, transform .7s ease;
+  }
+  .reveal.in{ opacity:1; transform:translateY(0); }
+
+  /* ---------- About ---------- */
+  .about{ background:var(--paper); }
+  .about-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:64px;
+    align-items:start;
+  }
+  .about p{ font-size:16.5px; margin-bottom:18px; max-width:56ch;}
+  .about strong{ color:var(--red); }
+
+  .spec-sheet{
+    border:1px solid rgba(10,25,41,0.18);
+    background:var(--white);
+  }
+  .spec-row{
+    display:flex;
+    justify-content:space-between;
+    padding:16px 22px;
+    border-bottom:1px solid rgba(10,25,41,0.12);
+    font-family:var(--mono);
+    font-size:13px;
+  }
+  .spec-row:last-child{ border-bottom:none; }
+  .spec-row .k{ color:var(--steel); letter-spacing:0.05em; text-transform:uppercase; font-size:11px;}
+  .spec-row .v{ font-weight:600; text-align:right; }
+
+  /* ---------- Projects ---------- */
+  .projects{ background:var(--navy-deep); color:var(--white); }
+  .project-grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:1px;
+    background:var(--navy-line);
+    border:1px solid var(--navy-line);
+  }
+  .project-card{
+    background:var(--navy-deep);
+    padding:36px;
+    position:relative;
+  }
+  .project-code{
+    font-family:var(--mono);
+    font-size:12px;
+    color:var(--cyan);
+    letter-spacing:0.1em;
+  }
+  .project-card h3{
+    font-family:var(--display);
+    font-size:28px;
+    font-weight:700;
+    margin:10px 0 14px;
+    letter-spacing:0.01em;
+  }
+  .project-card p{
+    color:var(--paper-dim);
+    font-size:15px;
+    max-width:48ch;
+    margin-bottom:20px;
+  }
+  .tag-row{ display:flex; gap:10px; flex-wrap:wrap; }
+  .tag{
+    font-family:var(--mono);
+    font-size:10.5px;
+    letter-spacing:0.06em;
+    text-transform:uppercase;
+    border:1px solid var(--navy-line);
+    padding:5px 10px;
+    color:var(--steel);
+  }
+  .tag.status{ color:var(--cyan); border-color:var(--cyan-dim); }
+
+  /* ---------- Team ---------- */
+  .team{ background:var(--paper); }
+  .team-grid{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:1px;
+    background:rgba(10,25,41,0.14);
+    border:1px solid rgba(10,25,41,0.14);
+  }
+  .team-card{
+    background:var(--paper);
+    padding:30px 22px;
+    text-align:left;
+  }
+  .team-card .role-code{
+    font-family:var(--mono);
+    font-size:11px;
+    color:#0a7a91;
+    letter-spacing:0.08em;
+  }
+  .team-card h4{
+    font-family:var(--display);
+    font-size:22px;
+    font-weight:700;
+    margin:8px 0 6px;
+  }
+  .team-card p{
+    font-size:13.5px;
+    color:var(--navy-mid);
+    opacity:0.75;
+  }
+
+  /* ---------- Contact ---------- */
+  .contact{ background:var(--navy-deep); color:var(--white); }
+  .contact-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:60px;
+  }
+  .contact p{ color:var(--paper-dim); max-width:44ch; margin-bottom:26px; }
+  .contact-list{ font-family:var(--mono); font-size:15px; }
+  .contact-list li{
+    padding:14px 0;
+    border-bottom:1px solid var(--navy-line);
+    display:flex;
+    justify-content:space-between;
+  }
+  .contact-list li span:first-child{ color:var(--steel); text-transform:uppercase; font-size:11px; letter-spacing:0.08em; align-self:center;}
+  .contact-list a:hover{ color:var(--cyan); }
+
+  footer{
+    background:var(--navy-deep);
+    border-top:1px solid var(--navy-line);
+    color:var(--steel);
+    font-family:var(--mono);
+    font-size:12px;
+    padding:26px 0;
+  }
+  footer .wrap{ display:flex; justify-content:space-between; flex-wrap:wrap; gap:10px; }
+
+  /* ---------- Responsive ---------- */
+  @media (max-width:860px){
+    .hero .wrap{ grid-template-columns:1fr; }
+    .hero-figure{ order:-1; max-width:340px; margin:0 auto 20px; }
+    .about-grid{ grid-template-columns:1fr; }
+    .project-grid{ grid-template-columns:1fr; }
+    .team-grid{ grid-template-columns:repeat(2,1fr); }
+    .contact-grid{ grid-template-columns:1fr; }
+    nav ul{
+      position:fixed;
+      top:76px; right:0;
+      background:var(--navy-deep);
+      border-left:1px solid var(--navy-line);
+      border-bottom:1px solid var(--navy-line);
+      flex-direction:column;
+      gap:0;
+      transform:translateX(100%);
+      transition:transform .25s ease;
+      width:220px;
+    }
+    nav ul.open{ transform:translateX(0); }
+    nav li{ border-bottom:1px solid var(--navy-line); }
+    nav a{ display:block; padding:16px 22px; }
+    .nav-toggle{
+      display:block;
+      background:none; border:1px solid var(--navy-line);
+      color:var(--white); font-family:var(--mono); font-size:12px;
+      padding:10px 14px; cursor:pointer;
+    }
+  }
+  @media (max-width:560px){
+    .team-grid{ grid-template-columns:1fr; }
+    .section-pad{ padding:80px 0; }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ animation:none !important; transition:none !important; }
+    .reveal{ opacity:1; transform:none; }
+    .callout{ opacity:1; }
+    .wing-svg path{ stroke-dashoffset:0 !important; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap nav-inner">
+    <div class="logo"><span class="bracket">[</span> HEZARFEN <span class="bracket">]</span><b>TEKNO TEAM</b></div>
+    <button class="nav-toggle" id="navToggle" aria-expanded="false" aria-controls="navList">MENÜ</button>
+    <nav>
+      <ul id="navList">
+        <li><a href="#hakkimizda">Hakkımızda</a></li>
+        <li><a href="#projeler">Projeler</a></li>
+        <li><a href="#ekip">Ekip</a></li>
+        <li><a href="#iletisim">İletişim</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<!-- ================= HERO ================= -->
+<section class="hero grid-dark on-dark">
+  <span class="crosshair tl"></span>
+  <span class="crosshair tr"></span>
+  <span class="coord-tag" style="top:20px; left:56px;">41.0082°N 29.0092°E</span>
+  <span class="coord-tag" style="top:20px; right:56px;">TEKNOFEST · SAVUNMA SANAYİİ</span>
+
+  <div class="wrap">
+    <div>
+      <div class="eyebrow hero-eyebrow">MÜHENDİSLİK TAKIMI — TEKNOFEST</div>
+      <h1>HEZARFEN<br>TEKNO <span>TEAM</span></h1>
+      <p class="lede">1632'de yapay kanatlarla Boğaz'ı geçtiği rivayet edilen Hezarfen Ahmet Çelebi'nin cesaretinden ilhamla; bugün insansız hava araçları, roket ve savunma teknolojileri üzerine çalışan bir TEKNOFEST takımıyız.</p>
+      <div class="hero-ctas">
+        <a href="#projeler" class="btn solid">Projelerimizi İncele</a>
+        <a href="#iletisim" class="btn">Bize Ulaşın</a>
+      </div>
+    </div>
+
+    <div class="hero-figure">
+      <svg class="wing-svg" viewBox="0 0 420 420" fill="none">
+        <!-- stylized technical sketch of artificial wings -->
+        <path class="draw" d="M210 80 C130 90 40 140 20 220 C70 210 120 190 165 165 C150 210 120 250 70 280 C130 275 190 245 210 200 C230 245 290 275 350 280 C300 250 270 210 255 165 C300 190 350 210 400 220 C380 140 290 90 210 80 Z"
+          stroke="#5ac8e0" stroke-width="1.6" stroke-linejoin="round"/>
+        <circle cx="210" cy="150" r="4" fill="#5ac8e0" class="draw"/>
+        <line class="dim-line" x1="20" y1="300" x2="400" y2="300" stroke="#5ac8e0" stroke-width="1" stroke-dasharray="4 4"/>
+        <line class="dim-line" x1="20" y1="294" x2="20" y2="306" stroke="#5ac8e0" stroke-width="1"/>
+        <line class="dim-line" x1="400" y1="294" x2="400" y2="306" stroke="#5ac8e0" stroke-width="1"/>
+      </svg>
+      <div class="callout callout-1">KANAT AÇIKLIĞI<br>REF. 1632</div>
+      <div class="callout callout-2">BOĞAZİÇİ GEÇİŞİ →</div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= ABOUT ================= -->
+<section class="about section-pad" id="hakkimizda">
+  <div class="wrap">
+    <div class="eyebrow">01 — HAKKIMIZDA</div>
+    <h2 class="section-title reveal">Bir mirası mühendisliğe dönüştürmek</h2>
+    <div class="rule"></div>
+
+    <div class="about-grid">
+      <div class="reveal">
+        <p>Adımızı, Evliya Çelebi'nin aktardığına göre <strong>1632 yılında yapay kanatlarla Galata Kulesi'nden uçarak Boğaz'ı geçtiği rivayet edilen</strong> Hezarfen Ahmet Çelebi'den alıyoruz. O günden bugüne değişen tek şey araçlar; cesaret ve merak aynı kalıyor.</p>
+        <p>Hezarfen Tekno Team olarak, TEKNOFEST bünyesinde Türk savunma sanayiine katkı sunacak insansız hava araçları, roket sistemleri ve yerli teknolojiler üzerine çalışıyoruz. Amacımız yalnızca yarışmak değil; ülkemizin teknolojik bağımsızlığına genç mühendisler yetiştirerek katkı sağlamak.</p>
+        <p>Disiplinler arası bir ekip olarak yazılım, elektronik-donanım ve mekanik alanlarında bir araya geliyor, her projeyi baştan sona kendi ellerimizle tasarlayıp üretiyoruz.</p>
+      </div>
+
+      <div class="spec-sheet reveal">
+        <div class="spec-row"><span class="k">Takım Adı</span><span class="v">Hezarfen Tekno Team</span></div>
+        <div class="spec-row"><span class="k">Faaliyet Alanı</span><span class="v">Savunma Sanayii</span></div>
+        <div class="spec-row"><span class="k">Katılım</span><span class="v">TEKNOFEST</span></div>
+        <div class="spec-row"><span class="k">Odak</span><span class="v">İHA / Roket / Yerli Sistemler</span></div>
+        <div class="spec-row"><span class="k">İlham Kaynağı</span><span class="v">Hezarfen Ahmet Çelebi, 1632</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= PROJECTS ================= -->
+<section class="projects section-pad" id="projeler">
+  <div class="wrap">
+    <div class="eyebrow">02 — PROJELER</div>
+    <h2 class="section-title reveal">Geliştirdiğimiz sistemler</h2>
+    <div class="rule"></div>
+  </div>
+
+  <div class="wrap">
+    <div class="project-grid reveal">
+      <div class="project-card">
+        <div class="project-code">HZF-01</div>
+        <h3>[Proje Adını Girin]</h3>
+        <p>Bu alana projenizin kısa açıklamasını ekleyin: hangi problemi çözüyor, hangi teknolojileri kullanıyor.</p>
+        <div class="tag-row">
+          <span class="tag status">Geliştirme Aşamasında</span>
+          <span class="tag">İHA</span>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="project-code">HZF-02</div>
+        <h3>[Proje Adını Girin]</h3>
+        <p>Bu alana projenizin kısa açıklamasını ekleyin: hangi problemi çözüyor, hangi teknolojileri kullanıyor.</p>
+        <div class="tag-row">
+          <span class="tag status">Tasarım Aşamasında</span>
+          <span class="tag">Roket</span>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="project-code">HZF-03</div>
+        <h3>[Proje Adını Girin]</h3>
+        <p>Bu alana projenizin kısa açıklamasını ekleyin: hangi problemi çözüyor, hangi teknolojileri kullanıyor.</p>
+        <div class="tag-row">
+          <span class="tag status">Test Aşamasında</span>
+          <span class="tag">Yazılım</span>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="project-code">HZF-04</div>
+        <h3>[Proje Adını Girin]</h3>
+        <p>Bu alana projenizin kısa açıklamasını ekleyin: hangi problemi çözüyor, hangi teknolojileri kullanıyor.</p>
+        <div class="tag-row">
+          <span class="tag status">Planlama Aşamasında</span>
+          <span class="tag">Sensör Sistemleri</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= TEAM ================= -->
+<section class="team section-pad" id="ekip">
+  <div class="wrap">
+    <div class="eyebrow">03 — EKİP</div>
+    <h2 class="section-title reveal">Takımı oluşturan disiplinler</h2>
+    <div class="rule"></div>
+  </div>
+  <div class="wrap">
+    <div class="team-grid reveal">
+      <div class="team-card">
+        <div class="role-code">ROL / 01</div>
+        <h4>Takım Kaptanı</h4>
+        <p>Proje yönetimi ve TEKNOFEST süreç koordinasyonu.</p>
+      </div>
+      <div class="team-card">
+        <div class="role-code">ROL / 02</div>
+        <h4>Yazılım</h4>
+        <p>Kontrol algoritmaları, otonom sistemler ve gömülü yazılım.</p>
+      </div>
+      <div class="team-card">
+        <div class="role-code">ROL / 03</div>
+        <h4>Elektronik-Donanım</h4>
+        <p>Devre tasarımı, sensör entegrasyonu ve haberleşme sistemleri.</p>
+      </div>
+      <div class="team-card">
+        <div class="role-code">ROL / 04</div>
+        <h4>Mekanik Tasarım</h4>
+        <p>Gövde, aerodinamik yapı ve üretim süreçleri.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= CONTACT ================= -->
+<section class="contact section-pad on-dark" id="iletisim">
+  <div class="wrap contact-grid">
+    <div>
+      <div class="eyebrow">04 — İLETİŞİM</div>
+      <h2 class="section-title reveal" style="margin-top:16px;">Bizimle iletişime geçin</h2>
+      <p style="margin-top:22px;">Sponsorluk, iş birliği veya takıma katılım hakkında konuşmak için bize ulaşabilirsiniz.</p>
+    </div>
+    <ul class="contact-list reveal">
+      <li><span>E-posta</span><a href="mailto:iletisim@hezarfenteknoteam.com">iletisim@hezarfenteknoteam.com</a></li>
+      <li><span>Instagram</span><a href="#">@hezarfenteknoteam</a></li>
+      <li><span>LinkedIn</span><a href="#">Hezarfen Tekno Team</a></li>
+      <li><span>Konum</span><span>Türkiye</span></li>
+    </ul>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <span>© 2026 HEZARFEN TEKNO TEAM</span>
+    <span>TEKNOFEST · SAVUNMA SANAYİİ</span>
+  </div>
+</footer>
+
+<script>
+  // Mobile nav toggle
+  const toggle = document.getElementById('navToggle');
+  const navList = document.getElementById('navList');
+  toggle.addEventListener('click', () => {
+    const open = navList.classList.toggle('open');
+    toggle.setAttribute('aria-expanded', open);
+  });
+  navList.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+    navList.classList.remove('open');
+    toggle.setAttribute('aria-expanded', false);
+  }));
+
+  // Scroll reveal
+  const revealEls = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+  }, { threshold: 0.15 });
+  revealEls.forEach(el => io.observe(el));
+</script>
+
+</body>
+</html>
