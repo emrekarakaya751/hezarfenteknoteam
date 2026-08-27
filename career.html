@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kariyer — Hezarfen Tekno Team</title>
+<meta name="description" content="Hezarfen Tekno Team'e ekip üyesi olarak başvurun.">
+<link rel="icon" type="image/png" href="assets/logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@500;700;800;900&family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600;8..60,700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy-deep:#0a1929;
+    --navy-mid:#122c46;
+    --navy-line: rgba(90,200,224,0.16);
+    --cyan:#5ac8e0;
+    --cyan-dim: rgba(90,200,224,0.55);
+    --paper:#ede7d9;
+    --paper-dim:#d9d2c0;
+    --steel:#8d99a6;
+    --red:#c81e2c;
+    --green:#4caf7d;
+    --white:#f7f5ef;
+    --display: 'Big Shoulders Display', sans-serif;
+    --body: 'Source Serif 4', Georgia, serif;
+    --mono: 'JetBrains Mono', monospace;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{
+    background:var(--navy-deep);
+    background-image:
+      linear-gradient(var(--navy-line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--navy-line) 1px, transparent 1px);
+    background-size:42px 42px;
+    color:var(--white);
+    font-family:var(--body);
+    line-height:1.6;
+    min-height:100vh;
+  }
+  a{color:inherit; text-decoration:none;}
+  :focus-visible{ outline:2px solid var(--red); outline-offset:3px; }
+
+  header{
+    background:rgba(10,25,41,0.92);
+    backdrop-filter:blur(6px);
+    border-bottom:1px solid var(--navy-line);
+  }
+  .nav-inner{
+    max-width:1180px; margin:0 auto; padding:0 32px;
+    display:flex; align-items:center; justify-content:space-between;
+    height:76px;
+  }
+  .logo-img{ height:42px; }
+  .back-link{
+    font-family:var(--mono); font-size:12px; letter-spacing:0.1em;
+    text-transform:uppercase; color:var(--steel);
+  }
+  .back-link:hover{ color:var(--cyan); }
+
+  .wrap{ max-width:720px; margin:0 auto; padding:70px 24px 100px; }
+  .eyebrow{
+    font-family:var(--mono); font-size:12px; letter-spacing:0.18em;
+    text-transform:uppercase; color:var(--cyan);
+  }
+  h1{
+    font-family:var(--display); font-weight:800;
+    font-size:clamp(30px,5vw,44px); margin-top:14px; line-height:1.05;
+  }
+  p.lede{ color:var(--paper-dim); margin-top:16px; max-width:56ch; }
+
+  .tabs{ display:flex; gap:1px; margin-top:40px; background:var(--navy-line); border:1px solid var(--navy-line); }
+  .tab-btn{
+    flex:1; padding:14px; text-align:center;
+    font-family:var(--mono); font-size:12px; letter-spacing:0.1em; text-transform:uppercase;
+    background:var(--navy-deep); color:var(--steel); cursor:pointer; border:none;
+  }
+  .tab-btn.active{ background:var(--navy-mid); color:var(--cyan); }
+
+  .panel{ display:none; margin-top:0; }
+  .panel.active{ display:block; }
+
+  form{ margin-top:28px; display:flex; flex-direction:column; gap:14px; }
+  .field-row{ display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+  label{
+    font-family:var(--mono); font-size:11px; letter-spacing:0.08em;
+    text-transform:uppercase; color:var(--steel); margin-bottom:6px; display:block;
+  }
+  input[type="text"], input[type="email"], input[type="tel"],
+  input[type="password"], input[type="number"], select{
+    width:100%; background:var(--navy-mid); border:1px solid var(--navy-line);
+    color:var(--white); font-family:var(--body); font-size:15px; padding:11px 13px;
+  }
+  input:focus, select:focus{ border-color:var(--cyan); }
+  .file-field{
+    border:1px dashed var(--navy-line); padding:14px; font-family:var(--mono); font-size:12.5px; color:var(--steel);
+  }
+  .file-field input{ margin-top:8px; font-family:var(--body); font-size:13px; color:var(--paper-dim); }
+  .gpa-row{ display:grid; grid-template-columns:2fr 1fr; gap:14px; }
+
+  .btn{
+    font-family:var(--mono); font-size:13px; letter-spacing:0.08em; text-transform:uppercase;
+    padding:14px 26px; border:1px solid var(--cyan); color:var(--white);
+    background:transparent; cursor:pointer; transition:background .2s ease, color .2s ease;
+  }
+  .btn:hover{ background:var(--cyan); color:var(--navy-deep); }
+  .btn.solid{ background:var(--red); border-color:var(--red); }
+  .btn.solid:hover{ background:#e13343; border-color:#e13343; color:var(--white); }
+  .btn:disabled{ opacity:0.5; cursor:not-allowed; }
+
+  .msg{ font-family:var(--mono); font-size:12.5px; margin-top:14px; min-height:1.4em; }
+  .msg.error{ color:#ff8a8a; }
+  .msg.ok{ color:var(--green); }
+
+  /* Dashboard */
+  #dashboard{ display:none; }
+  .profile-card{
+    border:1px solid var(--navy-line); background:var(--navy-mid); padding:22px 26px;
+    display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;
+  }
+  .profile-card .name{ font-family:var(--display); font-size:22px; font-weight:700; }
+  .profile-card .sub{ font-family:var(--mono); font-size:12px; color:var(--steel); margin-top:4px; }
+
+  .positions{ margin-top:44px; }
+  .position-card{
+    border:1px solid var(--navy-line); padding:22px 26px; margin-bottom:1px;
+    display:flex; justify-content:space-between; align-items:center; gap:16px; flex-wrap:wrap;
+  }
+  .position-card h3{ font-family:var(--display); font-size:20px; font-weight:700; }
+  .position-card .cat{ font-family:var(--mono); font-size:11px; color:var(--cyan); letter-spacing:0.05em; margin-top:4px;}
+  .position-card p{ color:var(--paper-dim); font-size:14px; margin-top:8px; max-width:44ch; }
+  .position-card .apply-status{ font-family:var(--mono); font-size:11.5px; color:var(--green); }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="nav-inner">
+    <img src="assets/logo.png" alt="Hezarfen Tekno Team logosu" class="logo-img">
+    <a href="index.html" class="back-link">← Ana Sayfa</a>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <div id="authSection">
+    <div class="eyebrow">KARİYER</div>
+    <h1>Hezarfen Tekno Team'e katıl</h1>
+    <p class="lede">Profil oluştur, açık pozisyonlarımıza başvur. Bilgilerin sadece ekip yönetimi tarafından değerlendirilir.</p>
+
+    <div class="tabs">
+      <button class="tab-btn active" id="tabSignup">Kayıt Ol</button>
+      <button class="tab-btn" id="tabLogin">Giriş Yap</button>
+    </div>
+
+    <!-- SIGN UP -->
+    <div class="panel active" id="panelSignup">
+      <form id="signupForm">
+        <div class="field-row">
+          <div><label for="su-name">Ad</label><input type="text" id="su-name" required></div>
+          <div><label for="su-surname">Soyad</label><input type="text" id="su-surname" required></div>
+        </div>
+        <div class="field-row">
+          <div><label for="su-phone">Telefon Numarası</label><input type="tel" id="su-phone" required></div>
+          <div><label for="su-email">E-posta Adresi</label><input type="email" id="su-email" required></div>
+        </div>
+        <div><label for="su-university">Üniversite</label><input type="text" id="su-university" required></div>
+        <div class="field-row">
+          <div><label for="su-faculty">Fakülte</label><input type="text" id="su-faculty" required></div>
+          <div><label for="su-department">Bölüm</label><input type="text" id="su-department" required></div>
+        </div>
+        <div class="field-row">
+          <div><label for="su-grade">Sınıf</label>
+            <select id="su-grade" required>
+              <option value="">Seçiniz</option>
+              <option>Hazırlık</option><option>1. Sınıf</option><option>2. Sınıf</option>
+              <option>3. Sınıf</option><option>4. Sınıf</option><option>Yüksek Lisans</option><option>Diğer</option>
+            </select>
+          </div>
+          <div class="gpa-row">
+            <div><label for="su-gpa">Not Ortalaması</label><input type="number" id="su-gpa" step="0.01" min="0" required></div>
+            <div><label for="su-gpa-scale">Sistem</label>
+              <select id="su-gpa-scale" required><option value="4">4'lük</option><option value="100">100'lük</option></select>
+            </div>
+          </div>
+        </div>
+        <div class="file-field">
+          <label for="su-cv" style="margin-bottom:0;">Özgeçmiş (CV) — PDF</label>
+          <input type="file" id="su-cv" accept=".pdf" required>
+        </div>
+        <div class="file-field">
+          <label for="su-portfolio" style="margin-bottom:0;">Portfolyo — PDF (opsiyonel)</label>
+          <input type="file" id="su-portfolio" accept=".pdf">
+        </div>
+        <div><label for="su-password">Şifre</label><input type="password" id="su-password" minlength="6" required></div>
+        <button type="submit" class="btn solid" id="signupBtn">Kayıt Ol</button>
+        <p class="msg" id="signupMsg"></p>
+      </form>
+    </div>
+
+    <!-- LOGIN -->
+    <div class="panel" id="panelLogin">
+      <form id="loginForm">
+        <div><label for="li-email">E-posta Adresi</label><input type="email" id="li-email" required></div>
+        <div><label for="li-password">Şifre</label><input type="password" id="li-password" required></div>
+        <button type="submit" class="btn solid" id="loginBtn">Giriş Yap</button>
+        <p class="msg" id="loginMsg"></p>
+      </form>
+    </div>
+  </div>
+
+  <!-- DASHBOARD (logged in) -->
+  <div id="dashboard">
+    <div class="eyebrow">KARİYER</div>
+    <h1>Açık Pozisyonlar</h1>
+    <div class="profile-card" style="margin-top:28px;">
+      <div>
+        <div class="name" id="dashName">—</div>
+        <div class="sub" id="dashEmail">—</div>
+      </div>
+      <button class="btn" id="logoutBtn">Çıkış Yap</button>
+    </div>
+
+    <div class="positions" id="positionsList"></div>
+  </div>
+
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore-compat.js"></script>
+<script>
+  // ===== 1) FIREBASE CONFIG — Firebase Console'dan alıp buraya yapıştırın =====
+  const firebaseConfig = {
+    apiKey: "AIzaSyCefL0FpIDpKPh4RZfqbuGfGlecEafjFMI",
+    authDomain: "hezarfen-kariyer.firebaseapp.com",
+    projectId: "hezarfen-kariyer",
+    storageBucket: "hezarfen-kariyer.firebasestorage.app",
+    messagingSenderId: "604464908716",
+    appId: "1:604464908716:web:7796b35cb3ccb47c7f1209"
+  };
+  firebase.initializeApp(firebaseConfig);
+  const auth = firebase.auth();
+  const db = firebase.firestore();
+
+  // ===== 2) GOOGLE APPS SCRIPT WEB APP URL — Apps Script'i deploy edince buraya yapıştırın =====
+  const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz0ISZJaVxq15mX3IrwIai-2syHDZGzC9NFmWkt085E9pNyniGsjI5X7NFU7ylPqXp0TQ/exec";
+
+  // ===== 3) AÇIK POZİSYONLAR — burayı düzenleyerek pozisyon ekleyip çıkarabilirsiniz =====
+  const OPEN_POSITIONS = [
+    { id: "yazilim", title: "Yazılım Ekibi", category: "Yazılım", description: "Otonom sistemler, kontrol algoritmaları ve gömülü yazılım üzerine çalışacak ekip üyeleri arıyoruz." },
+    { id: "mekanik", title: "Mekanik Tasarım Ekibi", category: "Mekanik", description: "Gövde tasarımı, aerodinamik yapı ve üretim süreçlerinde yer alacak ekip üyeleri arıyoruz." },
+    { id: "elektronik", title: "Elektronik-Donanım Ekibi", category: "Elektronik", description: "Devre tasarımı, sensör entegrasyonu ve haberleşme sistemleri üzerine çalışacak ekip üyeleri arıyoruz." },
+    { id: "sponsorluk", title: "Sponsorluk ve İletişim", category: "Sponsorluk", description: "Sponsor ilişkileri ve kurumsal iletişim süreçlerinde yer alacak ekip üyeleri arıyoruz." }
+  ];
+
+  // ---- Helpers ----
+  function fileToBase64(file) {
+    return new Promise((resolve, reject) => {
+      if (!file) return resolve(null);
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result.split(',')[1]);
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
+  }
+
+  async function postToAppsScript(payload) {
+    if (!APPS_SCRIPT_URL || APPS_SCRIPT_URL.indexOf('YOUR_') === 0) {
+      console.warn('Apps Script URL henüz ayarlanmadı — Sheets kaydı atlandı.');
+      return { success: false };
+    }
+    const res = await fetch(APPS_SCRIPT_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain' }, // preflight'ı önlemek için
+      body: JSON.stringify(payload)
+    });
+    return res.json();
+  }
+
+  // ---- Tabs ----
+  const tabSignup = document.getElementById('tabSignup');
+  const tabLogin = document.getElementById('tabLogin');
+  const panelSignup = document.getElementById('panelSignup');
+  const panelLogin = document.getElementById('panelLogin');
+  tabSignup.addEventListener('click', () => {
+    tabSignup.classList.add('active'); tabLogin.classList.remove('active');
+    panelSignup.classList.add('active'); panelLogin.classList.remove('active');
+  });
+  tabLogin.addEventListener('click', () => {
+    tabLogin.classList.add('active'); tabSignup.classList.remove('active');
+    panelLogin.classList.add('active'); panelSignup.classList.remove('active');
+  });
+
+  // ---- Sign up ----
+  document.getElementById('signupForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const btn = document.getElementById('signupBtn');
+    const msg = document.getElementById('signupMsg');
+    btn.disabled = true; msg.className = 'msg'; msg.textContent = 'Kaydediliyor...';
+
+    try {
+      const name = document.getElementById('su-name').value.trim();
+      const surname = document.getElementById('su-surname').value.trim();
+      const phone = document.getElementById('su-phone').value.trim();
+      const email = document.getElementById('su-email').value.trim();
+      const university = document.getElementById('su-university').value.trim();
+      const faculty = document.getElementById('su-faculty').value.trim();
+      const department = document.getElementById('su-department').value.trim();
+      const grade = document.getElementById('su-grade').value;
+      const gpa = document.getElementById('su-gpa').value;
+      const gpaScale = document.getElementById('su-gpa-scale').value;
+      const password = document.getElementById('su-password').value;
+      const cvFile = document.getElementById('su-cv').files[0];
+      const portfolioFile = document.getElementById('su-portfolio').files[0];
+
+      // 1) Firebase Auth hesabı oluştur
+      const cred = await auth.createUserWithEmailAndPassword(email, password);
+      const uid = cred.user.uid;
+
+      // 2) Dosyaları base64'e çevir
+      const cvBase64 = await fileToBase64(cvFile);
+      const portfolioBase64 = await fileToBase64(portfolioFile);
+
+      // 3) Apps Script'e gönder: Drive'a dosya kaydet + Sheets'e satır ekle
+      const scriptRes = await postToAppsScript({
+        type: 'profile',
+        name, surname, phone, email, university, faculty, department, grade,
+        gpa, gpaScale,
+        cvFilename: cvFile ? cvFile.name : '', cvMime: cvFile ? cvFile.type : '', cvBase64,
+        portfolioFilename: portfolioFile ? portfolioFile.name : '', portfolioMime: portfolioFile ? portfolioFile.type : '', portfolioBase64
+      });
+
+      // 4) Firestore'a profil kaydet (dosya linkleriyle birlikte)
+      await db.collection('users').doc(uid).set({
+        name, surname, phone, email, university, faculty, department, grade,
+        gpa, gpaScale,
+        cvUrl: scriptRes.cvUrl || '', portfolioUrl: scriptRes.portfolioUrl || '',
+        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+      });
+
+      msg.className = 'msg ok'; msg.textContent = 'Kayıt başarılı! Yönlendiriliyorsunuz...';
+    } catch (err) {
+      msg.className = 'msg error'; msg.textContent = 'Hata: ' + (err.message || err);
+    } finally {
+      btn.disabled = false;
+    }
+  });
+
+  // ---- Login ----
+  document.getElementById('loginForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const btn = document.getElementById('loginBtn');
+    const msg = document.getElementById('loginMsg');
+    btn.disabled = true; msg.className = 'msg'; msg.textContent = 'Giriş yapılıyor...';
+    try {
+      const email = document.getElementById('li-email').value.trim();
+      const password = document.getElementById('li-password').value;
+      await auth.signInWithEmailAndPassword(email, password);
+    } catch (err) {
+      msg.className = 'msg error'; msg.textContent = 'Hata: ' + (err.message || err);
+    } finally {
+      btn.disabled = false;
+    }
+  });
+
+  // ---- Logout ----
+  document.getElementById('logoutBtn').addEventListener('click', () => auth.signOut());
+
+  // ---- Auth state / Dashboard ----
+  const authSection = document.getElementById('authSection');
+  const dashboard = document.getElementById('dashboard');
+
+  auth.onAuthStateChanged(async (user) => {
+    if (user) {
+      authSection.style.display = 'none';
+      dashboard.style.display = 'block';
+
+      const doc = await db.collection('users').doc(user.uid).get();
+      const profile = doc.exists ? doc.data() : { name: '', surname: '' };
+      document.getElementById('dashName').textContent = (profile.name || '') + ' ' + (profile.surname || '');
+      document.getElementById('dashEmail').textContent = user.email;
+
+      // Kullanıcının başvurduğu pozisyonları çek
+      const appsSnap = await db.collection('applications').where('uid', '==', user.uid).get();
+      const appliedIds = new Set(appsSnap.docs.map(d => d.data().positionId));
+
+      const list = document.getElementById('positionsList');
+      list.innerHTML = '';
+      OPEN_POSITIONS.forEach(pos => {
+        const card = document.createElement('div');
+        card.className = 'position-card';
+        const applied = appliedIds.has(pos.id);
+        card.innerHTML = `
+          <div>
+            <h3>${pos.title}</h3>
+            <div class="cat">${pos.category}</div>
+            <p>${pos.description}</p>
+          </div>
+          ${applied
+            ? '<span class="apply-status">✓ Başvuruldu</span>'
+            : `<button class="btn solid apply-btn" data-id="${pos.id}" data-title="${pos.title}">Başvur</button>`}
+        `;
+        list.appendChild(card);
+      });
+
+      document.querySelectorAll('.apply-btn').forEach(btn => {
+        btn.addEventListener('click', async () => {
+          btn.disabled = true; btn.textContent = 'Gönderiliyor...';
+          try {
+            await db.collection('applications').add({
+              uid: user.uid, positionId: btn.dataset.id, positionTitle: btn.dataset.title,
+              name: profile.name, surname: profile.surname, email: user.email,
+              appliedAt: firebase.firestore.FieldValue.serverTimestamp()
+            });
+            await postToAppsScript({
+              type: 'application', name: profile.name, surname: profile.surname,
+              email: user.email, positionTitle: btn.dataset.title
+            });
+            btn.outerHTML = '<span class="apply-status">✓ Başvuruldu</span>';
+          } catch (err) {
+            btn.disabled = false; btn.textContent = 'Başvur';
+            alert('Başvuru gönderilemedi: ' + (err.message || err));
+          }
+        });
+      });
+
+    } else {
+      authSection.style.display = 'block';
+      dashboard.style.display = 'none';
+    }
+  });
+</script>
+</body>
+</html>
