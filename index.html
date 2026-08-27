@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Hezarfen Tekno Team — TEKNOFEST Savunma Sanayii Takımı</title>
 <meta name="description" content="Hezarfen Tekno Team, TEKNOFEST kapsamında Türk savunma sanayiine yönelik projeler geliştiren mühendislik takımıdır.">
+<link rel="icon" type="image/png" href="assets/logo.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@500;700;800;900&family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600;8..60,700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -109,19 +110,13 @@
     height:76px;
   }
   .logo{
-    font-family:var(--mono);
-    color:var(--white);
-    font-size:14px;
-    letter-spacing:0.04em;
-    line-height:1.3;
+    display:flex;
+    align-items:center;
   }
-  .logo b{
+  .logo-img{
+    height:46px;
+    width:auto;
     display:block;
-    font-family:var(--display);
-    font-size:22px;
-    font-weight:800;
-    letter-spacing:0.02em;
-    color:var(--white);
   }
   .logo .bracket{ color:var(--cyan); }
 
@@ -557,7 +552,7 @@
 
 <header>
   <div class="wrap nav-inner">
-    <div class="logo"><span class="bracket">[</span> HEZARFEN <span class="bracket">]</span><b>TEKNO TEAM</b></div>
+    <div class="logo"><img src="assets/logo.png" alt="Hezarfen Tekno Team logosu" class="logo-img"></div>
     <button class="nav-toggle" id="navToggle" aria-expanded="false" aria-controls="navList">MENÜ</button>
     <nav>
       <ul id="navList">
@@ -565,6 +560,7 @@
         <li><a href="#projeler">Projeler</a></li>
         <li><a href="#ekip">Ekip</a></li>
         <li><a href="#iletisim">İletişim</a></li>
+        <li><a href="career.html">Kariyer</a></li>
       </ul>
     </nav>
   </div>
