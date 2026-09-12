@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Yönetici Paneli — Hezarfen Tekno Team</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" type="image/png" href="assets/logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy-deep:#0a1929; --navy-mid:#122c46; --navy-line: rgba(90,200,224,0.16);
+    --cyan:#5ac8e0; --paper-dim:#d9d2c0; --steel:#8d99a6; --red:#c81e2c; --white:#f7f5ef;
+    --display:'Big Shoulders Display',sans-serif; --body:'Source Serif 4',Georgia,serif; --mono:'JetBrains Mono',monospace;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{ background:var(--navy-deep); color:var(--white); font-family:var(--body); min-height:100vh; }
+  a{ color:inherit; }
+  .wrap{ max-width:640px; margin:0 auto; padding:60px 24px 100px; }
+  .eyebrow{ font-family:var(--mono); font-size:12px; letter-spacing:0.15em; color:var(--cyan); text-transform:uppercase; }
+  h1{ font-family:var(--display); font-weight:800; font-size:34px; margin-top:10px; }
+  form{ margin-top:28px; display:flex; flex-direction:column; gap:14px; }
+  label{ font-family:var(--mono); font-size:11px; letter-spacing:0.08em; text-transform:uppercase; color:var(--steel); }
+  input, textarea{
+    width:100%; background:var(--navy-mid); border:1px solid var(--navy-line);
+    color:var(--white); font-family:var(--body); font-size:15px; padding:11px 13px;
+  }
+  textarea{ resize:vertical; }
+  .btn{
+    font-family:var(--mono); font-size:13px; letter-spacing:0.08em; text-transform:uppercase;
+    padding:13px 24px; border:1px solid var(--cyan); background:var(--red); border-color:var(--red);
+    color:var(--white); cursor:pointer;
+  }
+  .btn:hover{ background:#e13343; }
+  .btn:disabled{ opacity:.5; cursor:not-allowed; }
+  .msg{ font-family:var(--mono); font-size:12.5px; margin-top:10px; min-height:1.3em; }
+  .msg.error{ color:#ff8a8a; } .msg.ok{ color:#4caf7d; }
+  #panel{ display:none; }
+  .uid-box{
+    margin-top:30px; font-family:var(--mono); font-size:12px; color:var(--steel);
+    border:1px dashed var(--navy-line); padding:14px;
+  }
+  .uid-box b{ color:var(--cyan); word-break:break-all; }
+  .news-item{
+    border:1px solid var(--navy-line); padding:16px; margin-top:12px;
+    display:flex; justify-content:space-between; align-items:flex-start; gap:14px;
+  }
+  .news-item h4{ font-family:var(--display); font-size:18px; }
+  .news-item p{ font-size:13px; color:var(--paper-dim); margin-top:4px; }
+  .news-item button{
+    font-family:var(--mono); font-size:11px; color:#ff8a8a; background:none; border:1px solid #ff8a8a;
+    padding:6px 10px; cursor:pointer; flex-shrink:0;
+  }
+  .logout{ font-family:var(--mono); font-size:11px; color:var(--steel); cursor:pointer; margin-top:30px; display:inline-block; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="eyebrow">HEZARFEN TEKNO TEAM</div>
+  <h1>Yönetici Paneli</h1>
+
+  <div id="loginBox">
+    <form id="loginForm">
+      <div><label for="email">E-posta</label><input type="email" id="email" required></div>
+      <div><label for="password">Şifre</label><input type="password" id="password" required></div>
+      <button type="submit" class="btn">Giriş Yap</button>
+      <p class="msg" id="loginMsg"></p>
+    </form>
+  </div>
+
+  <div id="panel">
+    <form id="newsForm">
+      <div><label for="title">Haber Başlığı</label><input type="text" id="title" required></div>
+      <div><label for="body">Haber Metni</label><textarea id="body" rows="5" required></textarea></div>
+      <div><label for="imageUrl">Görsel Linki (opsiyonel — bir görseli internete yükleyip linkini buraya yapıştırın)</label><input type="text" id="imageUrl" placeholder="https://..."></div>
+      <button type="submit" class="btn">Haberi Yayınla</button>
+      <p class="msg" id="newsMsg"></p>
+    </form>
+
+    <div class="uid-box">
+      Giriş yaptığınız hesabın UID'si: <b id="uidDisplay">—</b><br>
+      Bu değeri Claude'a gönderin; yalnızca bu hesabın haber ekleyebilmesi için güvenlik kuralına ekleyecek.
+    </div>
+
+    <h3 style="margin-top:36px; font-family:var(--display);">Yayınlanan Haberler</h3>
+    <div id="newsListAdmin"></div>
+
+    <span class="logout" id="logoutBtn">Çıkış Yap</span>
+  </div>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore-compat.js"></script>
+<script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyCefL0FpIDpKPh4RZfqbuGfGlecEafjFMI",
+    authDomain: "hezarfen-kariyer.firebaseapp.com",
+    projectId: "hezarfen-kariyer",
+    storageBucket: "hezarfen-kariyer.firebasestorage.app",
+    messagingSenderId: "604464908716",
+    appId: "1:604464908716:web:7796b35cb3ccb47c7f1209"
+  };
+  firebase.initializeApp(firebaseConfig);
+  const auth = firebase.auth();
+  const db = firebase.firestore();
+
+  document.getElementById('loginForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const msg = document.getElementById('loginMsg');
+    msg.className = 'msg'; msg.textContent = 'Giriş yapılıyor...';
+    try {
+      await auth.signInWithEmailAndPassword(
+        document.getElementById('email').value.trim(),
+        document.getElementById('password').value
+      );
+    } catch (err) {
+      msg.className = 'msg error'; msg.textContent = 'Hata: ' + (err.message || err);
+    }
+  });
+
+  document.getElementById('logoutBtn').addEventListener('click', () => auth.signOut());
+
+  async function refreshNewsList() {
+    const listEl = document.getElementById('newsListAdmin');
+    listEl.innerHTML = 'Yükleniyor...';
+    const snap = await db.collection('news').orderBy('createdAt', 'desc').get();
+    if (snap.empty) { listEl.innerHTML = '<p class="msg">Henüz haber yok.</p>'; return; }
+    listEl.innerHTML = '';
+    snap.forEach(doc => {
+      const n = doc.data();
+      const item = document.createElement('div');
+      item.className = 'news-item';
+      item.innerHTML = `<div><h4>${n.title || ''}</h4><p>${(n.body || '').slice(0, 120)}...</p></div>
+        <button data-id="${doc.id}">Sil</button>`;
+      item.querySelector('button').addEventListener('click', async () => {
+        if (confirm('Bu haberi silmek istediğinize emin misiniz?')) {
+          await db.collection('news').doc(doc.id).delete();
+          refreshNewsList();
+        }
+      });
+      listEl.appendChild(item);
+    });
+  }
+
+  document.getElementById('newsForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const msg = document.getElementById('newsMsg');
+    msg.className = 'msg'; msg.textContent = 'Yayınlanıyor...';
+    try {
+      await db.collection('news').add({
+        title: document.getElementById('title').value.trim(),
+        body: document.getElementById('body').value.trim(),
+        imageUrl: document.getElementById('imageUrl').value.trim(),
+        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+      });
+      msg.className = 'msg ok'; msg.textContent = 'Haber yayınlandı!';
+      document.getElementById('newsForm').reset();
+      refreshNewsList();
+    } catch (err) {
+      msg.className = 'msg error'; msg.textContent = 'Hata: ' + (err.message || err) + ' (Güvenlik kuralları henüz bu hesaba izin vermiyor olabilir.)';
+    }
+  });
+
+  auth.onAuthStateChanged((user) => {
+    if (user) {
+      document.getElementById('loginBox').style.display = 'none';
+      document.getElementById('panel').style.display = 'block';
+      document.getElementById('uidDisplay').textContent = user.uid;
+      refreshNewsList();
+    } else {
+      document.getElementById('loginBox').style.display = 'block';
+      document.getElementById('panel').style.display = 'none';
+    }
+  });
+</script>
+</body>
+</html>
